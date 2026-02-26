@@ -10,9 +10,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Pages\" />
-    <Folder Include="Classes\" />
     <Folder Include="Models\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>
