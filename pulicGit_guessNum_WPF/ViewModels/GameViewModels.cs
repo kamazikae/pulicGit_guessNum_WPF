@@ -15,7 +15,7 @@ public class GameViewModels : INotifyPropertyChanged
     {
         NewGame(null);
         NewGameCommand = new RelayCommand(NewGame);
-        GuessCommand = new RelayCommand(GuessNumber, CanGuessNumber);
+        GuessCommand = new RelayCommand(GuessNumber);
     }
 
     public int PeopleNumber
@@ -63,17 +63,27 @@ public class GameViewModels : INotifyPropertyChanged
             OnPropertyChanged(nameof(Score));
         }
     }
+    public bool IsActive
+    {
+        get => field;
+        set
+        {
+            field = value;
+            OnPropertyChanged(nameof(IsActive));
+        }
+    }
 
     private void NewGame(object parameter)
     {
+        GenerateNumber();
         Score = 0;
         Attempt = 25;
         ErrorMessage = "";
+        IsActive = true;
     }
 
     private void GuessNumber(object parameter)
     {
-        GenerateNumber();
         if (PeopleNumber > RandNumber)
         {
             ErrorMessage = "Число меньше! Попробуй ещё раз";
@@ -90,18 +100,15 @@ public class GameViewModels : INotifyPropertyChanged
         {
             ErrorMessage = "Ты угадал число!";
             Score++;
-            NewGame(null);
+            Attempt--;
+            IsActive = false;
         }
 
         if(Attempt == 0)
         {
             Attempt = 0;
-            NewGame(null);
+            IsActive = false;
         }
-    }
-    private bool CanGuessNumber(object parameter)
-    {
-        return !string.IsNullOrEmpty(parameter.ToString());
     }
 
     private int GenerateNumber()
